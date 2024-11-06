@@ -1,0 +1,65 @@
+%% Drag Dominant Hand
+clc
+clear vars
+close all
+dragcoords = readtable("jon dominant dragg.csv");
+dragcoords(1:4,:)=[]; % make top 4 rows empty
+dragdata = table2array(dragcoords);
+time2 = dragdata(:,2);
+dragdata = dragdata*100; % converts to centimeters
+pen = [dragdata(:,3),dragdata(:,4),dragdata(:,5)];
+figure
+plot3(pen(:,1),pen(:,2),pen(:,3)); % thumb
+hold on
+wrist = [dragdata(:,6),dragdata(:,7),dragdata(:,8)];
+plot3(wrist(:,1),wrist(:,2),wrist(:,3)); % pen
+thumb = [dragdata(:,9),dragdata(:,10),dragdata(:,11)];
+plot3(thumb(:,1),thumb(:,2),thumb(:,3)); % wrist
+legend("thumb","pen","wrist");
+hold off
+axis equal
+
+dy = diff(wrist(:,3)); % Change in Z
+dt = diff(time2); % Change in time
+
+% Calculate Y-velocity
+vy = dy ./ dt;
+
+
+minDelay = 10; % Minimum index gap between turning points
+turningPoints = [];
+i = 1;
+for h = 1:length(time2)
+    if time2(h) > 0.5 & time2(h) < 4
+        i = h;
+            if i <= length(vy) - 1 && time2(i) < 4
+                if vy(i) <= 0 && vy(i + 1) > 0 % Condition for turning point
+                    turningPoints = [turningPoints; i + 1]; % Collect turning point
+                    i = i + minDelay; % Skip ahead by minDelay to enforce a gap
+                else
+                i = i + 1; % Otherwise, proceed to the next index
+                end
+            end
+    end
+end
+
+
+% Adjust time vector for plotting against vy, which is one element shorter
+timeForVy = time2(2:end); % Drop the first time value
+% Plot Y-velocity over time
+figure;
+plot(timeForVy, vy, 'LineWidth', 2);
+xlabel('Time');
+ylabel('Velocity in Y');
+title('Y-Velocity Over Time');
+hold on;
+
+% Highlight turning points on the plot
+scatter(timeForVy(turningPoints), vy(turningPoints), 'r', 'filled');
+legend('Y-Velocity', 'Turning Points');
+turningPointsX = timeForVy(turningPoints(1:end-1));
+turningPointsX = diff(turningPointsX);
+domliftmean = mean(turningPointsX);
+domliftstd = std(turningPointsX);
+fprintf('Mean of time at turning points for dom hand: %f seconds\n', domliftmean);
+fprintf('Standard deviation of time at turning points for dom hand: %f seconds\n', domliftstd);

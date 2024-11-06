@@ -1,0 +1,17 @@
+clc;
+clear vars;
+close all;
+SF = 1000;
+data1 = open("part1/trial1/ch1data.mat");%some data
+data2 = open("part1/trial1/ch2data.mat");%some other data
+data1 = data1.ch1data;
+data2 = data2.ch2data;
+Time = linspace(0,data1(end)*SF,size(data1,2));
+%plot(Time,data1)
+hold on
+plot(Time,data2)
+yyaxis left
+[A, B] = butter(2,20/500, "low");
+data1filtered = filtfilt(A,B,data1);
+plot(Time,data1filtered)
+yyaxis right

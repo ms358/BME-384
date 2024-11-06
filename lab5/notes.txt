@@ -1,0 +1,4 @@
+want to check if there's correlation between left and right arm
+see if there's a delay? "cross correlation" using xcorr function, and pick the one which has the highest correlation
+[C, lags] = xcorr (vel1,vel2, 120)
+stem(lags,r) for plotting the xcorr

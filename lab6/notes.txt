@@ -1,0 +1,7 @@
+making elipsoid to cover the errors
+constant vs variable errors
+absolute constant error - average distance from target
+constant error - systematic shift from target to center of cloud
+variable error - estimate consistency using standard deviations of x, y, and z, then find sqrt of sum of squares
+principle component analysis
+elipsoid defined by center, lengths of each axis, and number of triangles

@@ -1,0 +1,17 @@
+skipping synchronization part
+using dynamometer, emg, and cameras to measure grasping
+will see how fingers open and close during reaching
+how emg is related to force.
+use emg script
+aperture is distance between fingertips
+investigate using google images which muscles are used to squeeze fingers together
+flexor muscles in the hand
+analyze kinematics and emg data separately
+beginning and end of squeeze threshold for it is 10% of peak value
+find area under curve using integral
+
+
+# STUFF TO DO
+filter magnitudes
+average values for arrays
+stem plot for the thingy thing
